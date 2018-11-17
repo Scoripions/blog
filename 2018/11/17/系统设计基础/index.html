@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="KIKI" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="一、性能 二、伸缩性 三、扩展性 四、可用性 五、安全性 参考资料   一、性能性能指标1. 响应时间指某个请求从发出到接收到响应消耗的时间。 在对响应时间进行测试时，通常采用重复请求方式，然后计算平均响应时间。 2. 吞吐量指系统在单位时间内可以处理的请求数量，通常使用每秒的请求数来衡量。 3. 并发用户数指系统能同时处理的并发用户请求数量。 在没有并发存在的系统中，请求被顺序执行，此时响应">
+<meta name="keywords" content="blogs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="KIKI">
+<meta property="og:url" content="http://kiki.website/blog/2018/11/17/系统设计基础/index.html">
+<meta property="og:site_name" content="KIKI">
+<meta property="og:description" content="一、性能 二、伸缩性 三、扩展性 四、可用性 五、安全性 参考资料   一、性能性能指标1. 响应时间指某个请求从发出到接收到响应消耗的时间。 在对响应时间进行测试时，通常采用重复请求方式，然后计算平均响应时间。 2. 吞吐量指系统在单位时间内可以处理的请求数量，通常使用每秒的请求数来衡量。 3. 并发用户数指系统能同时处理的并发用户请求数量。 在没有并发存在的系统中，请求被顺序执行，此时响应">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-11-16T08:14:20.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="KIKI">
+<meta name="twitter:description" content="一、性能 二、伸缩性 三、扩展性 四、可用性 五、安全性 参考资料   一、性能性能指标1. 响应时间指某个请求从发出到接收到响应消耗的时间。 在对响应时间进行测试时，通常采用重复请求方式，然后计算平均响应时间。 2. 吞吐量指系统在单位时间内可以处理的请求数量，通常使用每秒的请求数来衡量。 3. 并发用户数指系统能同时处理的并发用户请求数量。 在没有并发存在的系统中，请求被顺序执行，此时响应">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://kiki.website/blog/2018/11/17/系统设计基础/"/>
+
+
+
+
+
+  <title> | KIKI</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+	<a href="https://github.com/Scoripions" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">KIKI</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://kiki.website/blog/2018/11/17/系统设计基础/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Scoripion">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="KIKI">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-17T17:49:30+08:00">
+                2018-11-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <!-- GFM-TOC -->
+<ul>
+<li><a href="#一性能">一、性能</a></li>
+<li><a href="#二伸缩性">二、伸缩性</a></li>
+<li><a href="#三扩展性">三、扩展性</a></li>
+<li><a href="#四可用性">四、可用性</a></li>
+<li><a href="#五安全性">五、安全性</a></li>
+<li><a href="#参考资料">参考资料</a><!-- GFM-TOC -->
+</li>
+</ul>
+<h1 id="一、性能"><a href="#一、性能" class="headerlink" title="一、性能"></a>一、性能</h1><h2 id="性能指标"><a href="#性能指标" class="headerlink" title="性能指标"></a>性能指标</h2><h3 id="1-响应时间"><a href="#1-响应时间" class="headerlink" title="1. 响应时间"></a>1. 响应时间</h3><p>指某个请求从发出到接收到响应消耗的时间。</p>
+<p>在对响应时间进行测试时，通常采用重复请求方式，然后计算平均响应时间。</p>
+<h3 id="2-吞吐量"><a href="#2-吞吐量" class="headerlink" title="2. 吞吐量"></a>2. 吞吐量</h3><p>指系统在单位时间内可以处理的请求数量，通常使用每秒的请求数来衡量。</p>
+<h3 id="3-并发用户数"><a href="#3-并发用户数" class="headerlink" title="3. 并发用户数"></a>3. 并发用户数</h3><p>指系统能同时处理的并发用户请求数量。</p>
+<p>在没有并发存在的系统中，请求被顺序执行，此时响应时间为吞吐量的倒数。例如系统支持的吞吐量为 100 req/s，那么平均响应时间应该为 0.01s。</p>
+<p>目前的大型系统都支持多线程来处理并发请求，多线程能够提高吞吐量以及缩短响应时间，主要有两个原因：</p>
+<ul>
+<li>多 CPU</li>
+<li>IO 等待时间</li>
+</ul>
+<p>使用 IO 多路复用等方式，系统在等待一个 IO 操作完成的这段时间内不需要被阻塞，可以去处理其它请求。通过将这个等待时间利用起来，使得 CPU 利用率大大提高。</p>
+<p>并发用户数不是越高越好，因为如果并发用户数太高，系统来不及处理这么多的请求，会使得过多的请求需要等待，那么响应时间就会大大提高。</p>
+<h2 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h2><h3 id="1-集群"><a href="#1-集群" class="headerlink" title="1. 集群"></a>1. 集群</h3><p>将多台服务器组成集群，使用负载均衡将请求转发到集群中，避免单一服务器的负载压力过大导致性能降低。</p>
+<h3 id="2-缓存"><a href="#2-缓存" class="headerlink" title="2. 缓存"></a>2. 缓存</h3><p>缓存能够提高性能的原因如下：</p>
+<ul>
+<li>缓存数据通常位于内存等介质中，这种介质对于读操作特别快；</li>
+<li>缓存数据可以位于靠近用户的地理位置上；</li>
+<li>可以将计算结果进行缓存，从而避免重复计算。</li>
+</ul>
+<h3 id="3-异步"><a href="#3-异步" class="headerlink" title="3. 异步"></a>3. 异步</h3><p>某些流程可以将操作转换为消息，将消息发送到消息队列之后立即返回，之后这个操作会被异步处理。</p>
+<h1 id="二、伸缩性"><a href="#二、伸缩性" class="headerlink" title="二、伸缩性"></a>二、伸缩性</h1><p>指不断向集群中添加服务器来缓解不断上升的用户并发访问压力和不断增长的数据存储需求。</p>
+<h2 id="伸缩性与性能"><a href="#伸缩性与性能" class="headerlink" title="伸缩性与性能"></a>伸缩性与性能</h2><p>如果系统存在性能问题，那么单个用户的请求总是很慢的；</p>
+<p>如果系统存在伸缩性问题，那么单个用户的请求可能会很快，但是在并发数很高的情况下系统会很慢。</p>
+<h2 id="实现伸缩性"><a href="#实现伸缩性" class="headerlink" title="实现伸缩性"></a>实现伸缩性</h2><p>应用服务器只要不具有状态，那么就可以很容易地通过负载均衡器向集群中添加新的服务器。</p>
+<p>关系型数据库的伸缩性通过 Sharding 来实现，将数据按一定的规则分布到不同的节点上，从而解决单台存储服务器的存储空间限制。</p>
+<p>对于非关系型数据库，它们天生就是为海量数据而诞生，对伸缩性的支持特别好。</p>
+<h1 id="三、扩展性"><a href="#三、扩展性" class="headerlink" title="三、扩展性"></a>三、扩展性</h1><p>指的是添加新功能时对现有系统的其它应用无影响，这就要求不同应用具备低耦合的特点。</p>
+<p>实现可扩展主要有两种方式：</p>
+<ul>
+<li>使用消息队列进行解耦，应用之间通过消息传递进行通信；</li>
+<li>使用分布式服务将业务和可复用的服务分离开来，业务使用分布式服务框架调用可复用的服务。新增的产品可以通过调用可复用的服务来实现业务逻辑，对其它产品没有影响。</li>
+</ul>
+<h1 id="四、可用性"><a href="#四、可用性" class="headerlink" title="四、可用性"></a>四、可用性</h1><h2 id="冗余"><a href="#冗余" class="headerlink" title="冗余"></a>冗余</h2><p>保证高可用的主要手段是使用冗余，当某个服务器故障时就请求其它服务器。</p>
+<p>应用服务器的冗余比较容易实现，只要保证应用服务器不具有状态，那么某个应用服务器故障时，负载均衡器将该应用服务器原先的用户请求转发到另一个应用服务器上，不会对用户有任何影响。</p>
+<p>存储服务器的冗余需要使用主从复制来实现，当主服务器故障时，需要提升从服务器为主服务器，这个过程称为切换。</p>
+<h2 id="监控"><a href="#监控" class="headerlink" title="监控"></a>监控</h2><p>对 CPU、内存、磁盘、网络等系统负载信息进行监控，当某个数据达到一定阈值时通知运维人员，从而在系统发生故障之前及时发现问题。</p>
+<h2 id="服务降级"><a href="#服务降级" class="headerlink" title="服务降级"></a>服务降级</h2><p>服务降级是系统为了应对大量的请求，主动关闭部分功能，从而保证核心功能可用。</p>
+<h1 id="五、安全性"><a href="#五、安全性" class="headerlink" title="五、安全性"></a>五、安全性</h1><p>要求系统在应对各种攻击手段时能够有可靠的应对措施。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li>大型网站技术架构：核心原理与案例分析</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+	 <div>
+        
+			<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">--------------------------In<i class="fa fa-paw"></i>End--------------------------</div>
+    
+</div>
+		
+      </div>
+	  <div>
+      
+        
+      
+</div>
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/17/计算机操作系统/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/17/重构/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Scoripion</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、性能"><span class="nav-number">1.</span> <span class="nav-text">一、性能</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#性能指标"><span class="nav-number">1.1.</span> <span class="nav-text">性能指标</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-响应时间"><span class="nav-number">1.1.1.</span> <span class="nav-text">1. 响应时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-吞吐量"><span class="nav-number">1.1.2.</span> <span class="nav-text">2. 吞吐量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-并发用户数"><span class="nav-number">1.1.3.</span> <span class="nav-text">3. 并发用户数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#性能优化"><span class="nav-number">1.2.</span> <span class="nav-text">性能优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-集群"><span class="nav-number">1.2.1.</span> <span class="nav-text">1. 集群</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-缓存"><span class="nav-number">1.2.2.</span> <span class="nav-text">2. 缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-异步"><span class="nav-number">1.2.3.</span> <span class="nav-text">3. 异步</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、伸缩性"><span class="nav-number">2.</span> <span class="nav-text">二、伸缩性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#伸缩性与性能"><span class="nav-number">2.1.</span> <span class="nav-text">伸缩性与性能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现伸缩性"><span class="nav-number">2.2.</span> <span class="nav-text">实现伸缩性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、扩展性"><span class="nav-number">3.</span> <span class="nav-text">三、扩展性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四、可用性"><span class="nav-number">4.</span> <span class="nav-text">四、可用性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#冗余"><span class="nav-number">4.1.</span> <span class="nav-text">冗余</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#监控"><span class="nav-number">4.2.</span> <span class="nav-text">监控</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务降级"><span class="nav-number">4.3.</span> <span class="nav-text">服务降级</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#五、安全性"><span class="nav-number">5.</span> <span class="nav-text">五、安全性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考资料"><span class="nav-number">6.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Scoripion</span>
+
+  
+</div>
+<div class="powered-by">
+<i class="fa fa-user-md"></i>
+<span id="busuanzi_container_site_uv">
+  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+</span>
+</div>
+<!--
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+-->
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+   <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas> 
+   <script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
+   <script type="text/javascript" src="/js/src/fireworks.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"live2d-widget-model-wanko"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"tagMode":false});</script></body>
+</html>
