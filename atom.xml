@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>KIKI</title>
+  
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://kiki.website/blog/"/>
+  <updated>2018-11-09T00:42:42.689Z</updated>
+  <id>http://kiki.website/blog/</id>
+  
+  <author>
+    <name>Scoripion</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>第一波</title>
+    <link href="http://kiki.website/blog/2018/11/08/first-article/"/>
+    <id>http://kiki.website/blog/2018/11/08/first-article/</id>
+    <published>2018-11-07T16:00:00.000Z</published>
+    <updated>2018-11-09T00:42:42.689Z</updated>
+    
+    <content type="html"><![CDATA[<p>ok，Let’s do it now!!</p><h1 id="Jay-Scoripion"><a href="#Jay-Scoripion" class="headerlink" title="Jay Scoripion"></a>Jay Scoripion</h1><h2 id="Work-For-Yourself"><a href="#Work-For-Yourself" class="headerlink" title="Work For Yourself"></a>Work For Yourself</h2><p><img src="http://life.southmoney.com/tuwen/UploadFiles_6871/201802/20180222131750691.jpg" alt="励志"></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;ok，Let’s do it now!!&lt;/p&gt;
+&lt;h1 id=&quot;Jay-Scoripion&quot;&gt;&lt;a href=&quot;#Jay-Scoripion&quot; class=&quot;headerlink&quot; title=&quot;Jay Scoripion&quot;&gt;&lt;/a&gt;Jay Scoripion&lt;/h1&gt;&lt;
+      
+    
+    </summary>
+    
+    
+  </entry>
+  
+</feed>
