@@ -114,7 +114,7 @@
 <meta property="og:image" content="http://kiki.website/blog/2018/07/06/pics//f99ee771-c56f-47fb-9148-c0036695b5fe.jpg">
 <meta property="og:image" content="http://kiki.website/blog/2018/07/06/pics//32b8374a-e822-4720-af0b-c0f485095ea2.jpg">
 <meta property="og:image" content="http://kiki.website/blog/2018/07/06/pics//class_loader_hierarchy.png">
-<meta property="og:updated_time" content="2018-11-19T11:57:35.993Z">
+<meta property="og:updated_time" content="2018-11-20T11:24:10.266Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JVM">
 <meta name="twitter:description" content="一、运行时数据区域 程序计数器 Java 虚拟机栈 本地方法栈 堆 方法区 运行时常量池 直接内存   二、垃圾收集 判断一个对象是否可被回收 引用类型 垃圾收集算法 垃圾收集器   三、内存分配与回收策略 Minor GC 和 Full GC 内存分配策略 Full GC 的触发条件   四、类加载机制 类的生命周期 类加载过程 类初始化时机 类与类加载器 类加载器分类 双亲委派模型 自定义">
@@ -450,6 +450,7 @@
 <h2 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h2><p>本地方法栈与 Java 虚拟机栈类似，它们之间的区别只不过是本地方法栈为本地方法服务。</p>
 <p>本地方法一般是用其它语言（C、C++ 或汇编语言等）编写的，并且被编译为基于本机硬件和操作系统的程序，对待这些方法需要特别处理。</p>
 <p><div align="center"> <img src="../pics//JNI-Java-Native-Interface.jpg" width="350"> </div><br></p>
+<a id="more"></a>
 <h2 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h2><p>所有对象都在这里分配内存，是垃圾收集的主要区域（”GC 堆”）。</p>
 <p>现代的垃圾收集器基本都是采用分代收集算法，其主要的思想是针对不同类型的对象采取不同的垃圾回收算法，可以将堆分成两块：</p>
 <ul>
